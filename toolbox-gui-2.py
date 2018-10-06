@@ -34,19 +34,15 @@ class MyTableWidget(QWidget):
 		##### Geoloc tab #####
 		self.tab1.layout = QGridLayout(self)
 		self.map = QWebEngineView()
-		#self.map.load(QUrl(""))
 		self.map.setUrl(QUrl("https://www.google.com/maps/@?api=1&map_action=map"))
-
 		self.geotitle = QLabel('***** GeoPy *****')
 		self.geotitle.setAlignment(Qt.AlignHCenter)
 		self.results1label = QLabel('Results:')
 		self.results1label.setAlignment(Qt.AlignTop)
 		self.results1label.setAlignment(Qt.AlignRight)
 		self.inputlabel = QLabel('IP Address:')
-		#self.inputlabel.setAlignment(Qt.AlightTop)
 		self.closebutton = QPushButton('Close')
 		self.enterbutton = QPushButton('Submit')
-		#self.results1label.setAlignment(Qt.AlignLeft)
 		self.results = QTextEdit()
 		self.usrin = QLineEdit()
 		##### Layout #####
@@ -58,8 +54,6 @@ class MyTableWidget(QWidget):
 		self.tab1.layout.addWidget(self.map, 2, 1)
 		self.tab1.layout.addWidget(self.results1label, 3, 0)
 		self.tab1.layout.addWidget(self.results, 3, 1)
-
-		#self.tab1.layout.addWidget(self.closebutton, 6, 1)
 		##### NetPy tab #####
 		##### Events #####
 		self.enterbutton.clicked.connect(self.erchk)
@@ -70,7 +64,6 @@ class MyTableWidget(QWidget):
 		if self.usrin.text() == '':
 			self.results.setText('no input')
 		else:
-			#self.map.load(QUrl("https://www.google.com/maps/search/?api=1&query=katy"))
 			self.Geoloc()
 	def Geoloc(self):
 		##### DB-ip.com #####
@@ -111,7 +104,6 @@ class MyTableWidget(QWidget):
 			ipin2 = "Coordinates: ",j2['loc']
 			print(*ipin2, sep='', file=open('results.txt', 'a'))
 		##### Display Results #####
-		#results = QTextEdit()
 		self.results.setText(readfile)
 		self.map.setUrl(QUrl("https://www.google.com/maps/search/?api=1&query="+cords))
 		##### Clear usrin #####
