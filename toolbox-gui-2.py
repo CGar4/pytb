@@ -1,16 +1,18 @@
 from PyQt5.Qt import *
+from PyQt5.QtWebEngineWidgets import *
 import sys
 import urllib.request
 import json
 import os
+import googlemaps
 class ToolBox(QMainWindow):
 	def __init__(self):
 		QDialog.__init__(self)
 		##### Window Geometry #####
 		self.left = 0
 		self.top = 0
-		self.width = 400
-		self.hight = 400
+		self.width = 800
+		self.hight = 700
 		self.setGeometry(self.left, self.top, self.width, self.hight)
 		#self.tab2UI()
 		#self.tab3UI()
@@ -25,17 +27,25 @@ class MyTableWidget(QWidget):
 		self.tabs = QTabWidget()
 		self.tab1 = QWidget()
 		self.tab2 = QWidget()
-		self.tabs.resize(300,200)
+		self.tabs.resize(600,500)
 		##### Add tabs #####
-		self.tabs.addTab(self.tab1,"Tab 1")
+		self.tabs.addTab(self.tab1,"GeoPy")
 		self.tabs.addTab(self.tab2,"Tab 2")
 		##### Geoloc tab #####
 		self.tab1.layout = QGridLayout(self)
+		#self.gmaps = googlemaps.Client(key='AIzaSyBU2i_nMgasgRkGN6cPz2YECfGLLzXuwDE')
+		#self.gmapsresults = self.gmaps.reverse_geocode((29.8321, -95.7346))
+		self.map = QWebEngineView()
+		#self.map.load(QUrl(""))
+		self.map.setUrl(QUrl("https://www.google.com/maps/@?api=1&map_action=map"))
+
 		self.geotitle = QLabel('***** GeoPy *****')
 		self.geotitle.setAlignment(Qt.AlignHCenter)
 		self.results1label = QLabel('Results:')
 		self.results1label.setAlignment(Qt.AlignTop)
 		self.results1label.setAlignment(Qt.AlignRight)
+		self.inputlabel = QLabel('IP Address:')
+		#self.inputlabel.setAlignment(Qt.AlightTop)
 		self.closebutton = QPushButton('Close')
 		self.enterbutton = QPushButton('Submit')
 		#self.results1label.setAlignment(Qt.AlignLeft)
@@ -44,10 +54,13 @@ class MyTableWidget(QWidget):
 		##### Layout #####
 		self.tab1.setLayout(self.tab1.layout)
 		self.tab1.layout.addWidget(self.geotitle, 1, 1)
-		self.tab1.layout.addWidget(self.usrin, 2, 1)
-		self.tab1.layout.addWidget(self.enterbutton, 2, 2)
-		self.tab1.layout.addWidget(self.results1label)
-		self.tab1.layout.addWidget(self.results)
+		self.tab1.layout.addWidget(self.inputlabel, 6, 0)
+		self.tab1.layout.addWidget(self.usrin, 6, 1)
+		self.tab1.layout.addWidget(self.enterbutton, 6, 2)
+		self.tab1.layout.addWidget(self.map, 2, 1)
+		self.tab1.layout.addWidget(self.results1label, 3, 0)
+		self.tab1.layout.addWidget(self.results, 3, 1)
+
 		#self.tab1.layout.addWidget(self.closebutton, 6, 1)
 		##### NetPy tab #####
 		##### Events #####
@@ -59,6 +72,7 @@ class MyTableWidget(QWidget):
 		if self.usrin.text() == '':
 			self.results.setText('no input')
 		else:
+			#self.map.load(QUrl("https://www.google.com/maps/search/?api=1&query=katy"))
 			self.Geoloc()
 	def Geoloc(self):
 		##### DB-ip.com #####
@@ -76,6 +90,7 @@ class MyTableWidget(QWidget):
 		res2 = urllib.request.urlopen(ipinfoapi)
 		resb2 = res2.read()
 		j2 = json.loads(resb2.decode("utf-8"))
+		cords = j2['loc']
 		ipin5 = "city: ",j2['city']
 		##### Write to File #####
 		print(*db1, sep='', file=open('results.txt', 'w'))##ip
@@ -100,6 +115,7 @@ class MyTableWidget(QWidget):
 		##### Display Results #####
 		#results = QTextEdit()
 		self.results.setText(readfile)
+		self.map.setUrl(QUrl("https://www.google.com/maps/search/?api=1&query="+cords))
 		##### Clear usrin #####
 		self.usrin.setText('')
 	@pyqtSlot()
