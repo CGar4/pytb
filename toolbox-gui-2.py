@@ -33,8 +33,6 @@ class MyTableWidget(QWidget):
 		self.tabs.addTab(self.tab2,"Tab 2")
 		##### Geoloc tab #####
 		self.tab1.layout = QGridLayout(self)
-		#self.gmaps = googlemaps.Client(key='AIzaSyBU2i_nMgasgRkGN6cPz2YECfGLLzXuwDE')
-		#self.gmapsresults = self.gmaps.reverse_geocode((29.8321, -95.7346))
 		self.map = QWebEngineView()
 		#self.map.load(QUrl(""))
 		self.map.setUrl(QUrl("https://www.google.com/maps/@?api=1&map_action=map"))
