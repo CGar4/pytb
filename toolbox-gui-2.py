@@ -11,8 +11,8 @@ class ToolBox(QMainWindow):
 		##### Window Geometry #####
 		self.left = 0
 		self.top = 0
-		self.width = 800
-		self.hight = 700
+		self.width = 1100
+		self.hight = 900
 		self.setGeometry(self.left, self.top, self.width, self.hight)
 		#self.tab2UI()
 		#self.tab3UI()
@@ -34,7 +34,8 @@ class MyTableWidget(QWidget):
 		##### Geoloc tab #####
 		self.tab1.layout = QGridLayout(self)
 		self.map = QWebEngineView()
-		self.map.setUrl(QUrl("https://www.google.com/maps/@?api=1&map_action=map"))
+		#self.map.setUrl(QUrl("https://maps.tilehosting.com/c/60127d7e-52c2-4b6c-9c9a-6934e197dfb0/styles/streets/?key=LUzQrA8HElXvZxe6AKz5#14.02/29.75868/-95.3657/25.6/60"))
+		self.map.setUrl(QUrl("file:///home/los/pytb/mtilermap.html"))
 		self.geotitle = QLabel('***** GeoPy *****')
 		self.geotitle.setAlignment(Qt.AlignHCenter)
 		self.results1label = QLabel('Results:')
@@ -51,9 +52,9 @@ class MyTableWidget(QWidget):
 		self.tab1.layout.addWidget(self.inputlabel, 6, 0)
 		self.tab1.layout.addWidget(self.usrin, 6, 1)
 		self.tab1.layout.addWidget(self.enterbutton, 6, 2)
-		self.tab1.layout.addWidget(self.map, 2, 1)
-		self.tab1.layout.addWidget(self.results1label, 3, 0)
-		self.tab1.layout.addWidget(self.results, 3, 1)
+		self.tab1.layout.addWidget(self.map, 2, 0, 2, 3)
+		self.tab1.layout.addWidget(self.results1label, 4, 0)
+		self.tab1.layout.addWidget(self.results, 4, 1)
 		##### NetPy tab #####
 		##### Events #####
 		self.enterbutton.clicked.connect(self.erchk)
@@ -82,6 +83,8 @@ class MyTableWidget(QWidget):
 		resb2 = res2.read()
 		j2 = json.loads(resb2.decode("utf-8"))
 		cords = j2['loc']
+		spl2 = cords.split(',')
+		loc0 = spl2[0]+"/"+spl2[1]
 		ipin5 = "city: ",j2['city']
 		##### Write to File #####
 		print(*db1, sep='', file=open('results.txt', 'w'))##ip
@@ -105,7 +108,7 @@ class MyTableWidget(QWidget):
 			print(*ipin2, sep='', file=open('results.txt', 'a'))
 		##### Display Results #####
 		self.results.setText(readfile)
-		self.map.setUrl(QUrl("https://www.google.com/maps/search/?api=1&query="+cords))
+		#self.map.setUrl(QUrl("https://maps.tilehosting.com/c/60127d7e-52c2-4b6c-9c9a-6934e197dfb0/styles/darkmatter/?key=LUzQrA8HElXvZxe6AKz5#1/"+loc0))
 		##### Clear usrin #####
 		self.usrin.setText('')
 	@pyqtSlot()
